@@ -12,7 +12,7 @@ var server = http.createServer(function(req,res)
         var filename = serverPath.split("/")[serverPath.split("/").length-1].split("?")[0];
         var filetype = "";
         // provoke a server error 
-        if (filename=="500") throw new Error('Error 505');
+        if (filename=="500") throw new Error('Error 500');
 
         if (filename!="")
         {
