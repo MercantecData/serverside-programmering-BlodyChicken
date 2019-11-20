@@ -1,33 +1,50 @@
 var mysql = require("mysql");
 var con = mysql.createConnection({ host: "localhost", user: "root", password: "" });
 var db = "booking";
-var tables = {name:"rooms"};
-var columbs = "Navn VARCHAR(50)";
-con.connect(function(err)
+var tables = ["rooms","reservation"];
+var columbs = { rooms: ["Navn VARCHAR(50)", "Beskrivelse VARCHAR(255)"], reservation: ["RoomId INT", "Dato TIMESTAMP"] };
+//var testData = { rooms: ["Navn:Lokale 1", "Beskrivelse:Stue plan"], reservation: ["RoomId INT", "Dato TIMESTAMP"] };
+
+exports.makeDb = (res, callback) =>
 {
-    if (err!=null) 
-    {
-        res.end("Error:" + err + "\n");
-    }
-    else
-    { 
-    	con.query("USE "+db, function (err, data)
-    	{
-    		if (err != null)
-    		{
-        		con.query("CREATE DATABASE "+db, function (err, data)
-        		{
-        			if (err != null) res.end("Error Creating DB:"+db);
-        			else
-        				con.query("CREATE TABLE "+db+"."+tables+" (PNR INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (PNR))", function (err, data) {
-        					if (err != null) res.end("Error Creating Table: " + tables);
+	con.connect(function(err)
+	{
+		if (err!=null) 
+		{
+			res.end("Error:" + err + "\n");
+		}
+		else
+		{
+			con.query("DROP DATABASE IF EXISTS " + db, function (err, data)
+			{ 
+    			con.query("USE "+db, function (err, data)
+    			{
+    				if (err != null)
+    				{
+        				con.query("CREATE DATABASE "+db, function (err, data)
+        				{
+        					if (err != null) res.end("Error Creating DB:" + db);
         					else
-        						con.query("ALTER TABLE " + db + "." + tables + " ADD " + columbs , function (err, data) {
-        							if (err != null) res.end("Error Creating Columb: " + columbs);
-        						});
+        					{								
+        						for (var tableName in tables)
+        						{
+        							var columb = "";
+        							for (var columbName in columbs[tables[tableName]])
+        							{
+         								columb += ", " + columbs[tables[tableName]][columbName];
+        							}
+									con.query("CREATE TABLE " + db + "." + tables[tableName] + " (PNR INT NOT NULL AUTO_INCREMENT" + columb + ", PRIMARY KEY (PNR))", function (err, data)
+									{
+										if (err != null) res.end("Error Creating Table: " + tables);  						
+									});
+        						}								       						
+        					}
+        					callback(res);
         				});
-        		});
-        	}
-        });
-	}
-});
+    				}
+    			});
+    			
+			});
+		}
+	});
+}
