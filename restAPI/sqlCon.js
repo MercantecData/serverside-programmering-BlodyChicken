@@ -2,8 +2,7 @@ var mysql = require("mysql");
 var con = mysql.createConnection({ host: "localhost", user: "root", password: "" });
 var db = "booking";
 var tables = ["rooms","reservation"];
-var columbs = { rooms: ["Navn VARCHAR(50)", "Beskrivelse VARCHAR(255)"], reservation: ["RoomId INT", "Dato TIMESTAMP"] };
-//var testData = { rooms: ["Navn:Lokale 1", "Beskrivelse:Stue plan"], reservation: ["RoomId INT", "Dato TIMESTAMP"] };
+var columbs = { rooms: ["Navn VARCHAR(50)", "Beskrivelse VARCHAR(255)"], reservation: ["RoomId INT", "Dato DATETIME", "Ansvarlig VARCHAR(50)"] };
 
 exports.makeDb = (res, callback) =>
 {
@@ -35,11 +34,11 @@ exports.makeDb = (res, callback) =>
         							}
 									con.query("CREATE TABLE " + db + "." + tables[tableName] + " (PNR INT NOT NULL AUTO_INCREMENT" + columb + ", PRIMARY KEY (PNR))", function (err, data)
 									{
-										if (err != null) res.end("Error Creating Table: " + tables);  						
+										if (err != null) res.end("Error Creating Table: " + tables);									
 									});
         						}								       						
         					}
-        					callback(res);
+        					callback(res,con,db);
         				});
     				}
     			});
