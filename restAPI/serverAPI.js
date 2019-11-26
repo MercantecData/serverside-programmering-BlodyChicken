@@ -103,7 +103,7 @@ var handleRequest = (req, res, con) =>
         else
             if (req.url.split("?")[0] == "/add")
             {
-                post(req, res);
+                post(req, res,con);
             }
             else
             {
@@ -116,12 +116,12 @@ var handleRequest = (req, res, con) =>
             }
 }
 
-function post(req, res)
+function post(req, res, con)
 {
     var LokaleId = "";
     var FraDato = "";
     var TilDato = "";
-    var FraTime = "";
+    var FraTime = "xx";
     var TilTime = "";
     var Ansvarlig = "";
 
@@ -131,12 +131,21 @@ function post(req, res)
                 if (e.split("=")[0] == "LokaleId") LokaleId = e.split("=")[1];
                 if (e.split("=")[0] == "FraDato") FraDato = e.split("=")[1];
                 if (e.split("=")[0] == "TilDato") TilDato = e.split("=")[1];
-                if (e.split("=")[0] == "FraTime") FraTime = e.split("=")[1];
-                if (e.split("=")[0] == "TilTime") TilTime = e.split("=")[1];
+                if (e.split("=")[0] == "FraTime") FraTime = e.split("=")[1].replace("%3A", ":");
+                if (e.split("=")[0] == "TilTime") TilTime = e.split("=")[1].replace("%3A", ":");
                 if (e.split("=")[0] == "Ansvarlig") Ansvarlig = e.split("=")[1];
             });
 
-            res.end("POST OK!" + JSON.stringify(LokaleId + FraDato + TilDato + FraTime + TilTime + Ansvarlig, null, '\t'));
+            var fra = FraDato + " " + FraTime + ":00";
+            var til = TilDato + " " + TilTime + ":00";
+            var query = "SELECT * FROM booking.reservation WHERE ";
+            query += "FraDato<='" + fra + "' AND TilDato>='" + fra + "'";
+            con.query(query, function (err, data) {
+                res.write(JSON.stringify(data, null, '\t') + "\n");
+                res.end("POST OK!" + JSON.stringify(fra, null, '\t'));
+            });
+
+            
         } else
             res.end("POST error!");
 }
