@@ -6,12 +6,22 @@
     <title>POST TEST</title>
 </head>
 <body>
-    <form action="/add" method="POST">
+    <h1>ResAPI</h1>
+    <b>localhost:8080</b> (Denne side)<br>
+    <b>localhost:8080/rooms?key=123</b> (Viser Alle Lokaler)<br>
+    <b>localhost:8080/booking?key=123</b> (Viser alle bookinger i dag)<br>
+    <b>localhost:8080/booking?key=123&day=14</b> (Viser alle bookinger den 14 i denne måned)<br>
+    <b>localhost:8080/booking?key=123&month=11</b> (Viser alle bookinger dags dato i måned 11)<br>
+    <b>localhost:8080/booking?key=123&day=24&month=12</b> (Viser alle bookinger den 24 i 12)<br>
+    <b>localhost:8080/booking?key=123&day=6&month=7&year=2020</b> (Viser alle bookinger den 6-7-2020)<br>
+    <b>localhost:8080/add?key=123</b> (Post her til for at adde en bookning, Felter der skal bruges LokaleId,FraDato,TilDato,FraTime,TilTime,Ansvarlig)<br>
+
+    <h1>Booking</h1>
+    <form action="/add?key=123" method="POST">
         LokaleId: <input type="text" name="LokaleId"><br>
         Fra: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" name="FraDato"> kl: <input type="time" name="FraTime"><br>
         Til: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="date" name="TilDato"> kl: <input type="time" name="TilTime"><br>
         Ansvarlig:<input type="text" name="Ansvarlig"><br>
-        Key: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="Key"><br>
         <input type="submit" value="Submit">
     </form>
 </body>

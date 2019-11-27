@@ -4,6 +4,7 @@ var db = "booking";
 var tables = ["rooms","reservation"];
 var columbs = { rooms: ["Navn VARCHAR(50)", "Beskrivelse VARCHAR(255)"], reservation: ["LokaleId INT", "FraDato DATETIME", "TilDato DATETIME", "Ansvarlig VARCHAR(50)", "OpdateringsDato DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"] };
 
+// brug database hvis den eksistere ellers opret en ny
 exports.checkForDb = (req, res, testData, makeDatabase, handleRequest) =>
 {
 	con = mysql.createConnection({ host: "localhost", user: "root", password: "", timezone: "UTC" });
